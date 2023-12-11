@@ -1,7 +1,7 @@
 package com.ll.medium.domain.post;
 
 import com.ll.medium.DataNotFoundException;
-import com.ll.medium.domain.member.Member;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,15 +11,16 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class PostService {
 
     private final PostRepository postRepository;
 
-    public List<Post> getList() {
+    public List<Post> readList() {
         return this.postRepository.findAll();
     }
 
-    public Post getPost(Long id) {
+    public Post readPost(Long id) {
         Optional<Post> post = this.postRepository.findById(id);
         if (post.isPresent()) {
             return post.get();
@@ -28,23 +29,23 @@ public class PostService {
         }
     }
 
-    public void create(String subject, String content, Member member) {
-        Post p = new Post();
-        p.setSubject(subject);
-        p.setContent(content);
-        p.setCreateDate(LocalDateTime.now());
-        p.setAuthor(member);
-        this.postRepository.save(p);
+    @Transactional
+    public void createPost(String subject, String content) {
+        Post post = new Post();
+        post.setSubject(subject);
+        post.setContent(content);
+        post.setCreateDate(LocalDateTime.now());
+        this.postRepository.save(post);
     }
 
-    public void modify(Post post, String subject, String content) {
+    public void modifyPost(Post post, String subject, String content) {
         post.setSubject(subject);
         post.setContent(content);
         post.setModifyDate(LocalDateTime.now());
         this.postRepository.save(post);
     }
 
-    public void delete(Post post) {
+    public void deletePost(Post post) {
         this.postRepository.delete(post);
     }
 }

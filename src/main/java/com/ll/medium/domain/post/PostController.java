@@ -1,12 +1,14 @@
 package com.ll.medium.domain.post;
 
+import com.ll.medium.domain.comment.CommentForm;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,8 +21,8 @@ public class PostController {
 
     //글 목록 조회
     @GetMapping("/list")
-    public String list(Model model) {
-        List<Post> postList = this.postService.getList();
+    public String readList(Model model) {
+        List<Post> postList = this.postService.readList();
         model.addAttribute("postList", postList);
         return "post_list";
     }
@@ -30,15 +32,26 @@ public class PostController {
 
     //글 상세내용 조회
     @GetMapping(value = "/{id}")
-    public String detail(Model model, @PathVariable("id") Long id) {
-        Post post = this.postService.getPost(id);
+    public String readPost(Model model, @PathVariable("id") Long id, CommentForm commentForm) {
+        Post post = this.postService.readPost(id);
         model.addAttribute("Post", post);
         return "post_detail";
     }
 
     //글 작성
-    //@GetMapping("/write")
-    //@PostMapping("/write")
+    @GetMapping("/write")
+    public String createPost(PostForm postForm) {
+        return "post_form";
+    }
+
+    @PostMapping("/write")
+    public String createPost(@Valid PostForm postForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "post_form";
+        }
+        this.postService.createPost(postForm.getSubject(), postForm.getContent());
+        return "redirect:/post/list";
+    }
 
     //글 수정
     //@GetMapping("/{id}/modify")
