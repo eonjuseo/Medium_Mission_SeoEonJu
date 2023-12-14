@@ -1,16 +1,21 @@
 package com.ll.medium.domain.member;
 
+import com.ll.medium.domain.comment.CommentForm;
+import com.ll.medium.domain.post.Post;
+import com.ll.medium.domain.post.PostService;
 import jakarta.validation.Valid;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 
 @RequestMapping("/member")
@@ -51,12 +56,16 @@ public class MemberController {
         return "redirect:/";
     }
 
-
-
     @GetMapping("/login")
     public String showLogin(MemberForm memberForm) {
         return "login_form";
     }
 
+    @GetMapping(value = "member/{id}")
+    public String readMember(Model model, @PathVariable("id") Long id, MemberForm memberForm) {
+        Member member = this.memberService.getuserById(id);
+        model.addAttribute("Member", member);
+        return "member_info";
+    }
 
 }

@@ -1,15 +1,14 @@
-<html lang="en">
-
-<div layout:fragment="content">
+<html layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
     <h1>Medium</h1>
 
-    <h2>최신 게시물</h2>
-
-    <ul>
-        <li th:each="post : ${posts}">
-            <a th:href="|/post/${post.id}|" th:text="${post.title}"></a>
-        </li>
-    </ul>
-</div>
+    <div class="container">
+        <h2>최신 게시물</h2>
+        <ul>
+            <li th:each="post : ${latestPosts}">
+                <a th:href="@{/post/{postId}(postId=${post.id})}" th:text="${post.title}"></a>
+            </li>
+        </ul>
+        <a th:href="@{/post/list}" class="btn btn-primary">전체 글 보기</a>
+    </div>
 
 </html>

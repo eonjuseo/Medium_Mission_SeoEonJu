@@ -34,15 +34,4 @@ public class Member {
     @Column(unique = true)
     private String email;
 
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-
-        authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
-
-        if (List.of("system", "admin").contains(username)) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        }
-        return authorities;
-    }
-
 }
