@@ -20,6 +20,10 @@ public class PostService {
         return this.postRepository.findAll();
     }
 
+    public List<Post> getLatest30Posts() {
+        return postRepository.findTop30ByIsPublishedOrderByIdDesc();
+    }
+
     public Post readPost(Long id) {
         Optional<Post> post = this.postRepository.findById(id);
         if (post.isPresent()) {
@@ -48,4 +52,13 @@ public class PostService {
     public void deletePost(Post post) {
         this.postRepository.delete(post);
     }
+
+    public List<Post> getPostsByUser(String username) {
+        return postRepository.findByCreatedBy(username);
+    }
+
+    public List<Post> getPostsByMember(String username) {
+        return postRepository.findByCreatedBy(username);
+    }
+
 }

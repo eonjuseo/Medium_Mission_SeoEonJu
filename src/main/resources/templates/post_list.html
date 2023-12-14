@@ -2,17 +2,21 @@
 <div layout:fragment="content" class="container my-3">
     <table class="table">
         <thead class="table-dark">
-        <tr>
+        <tr class="text-center">
             <th>번호</th>
-            <th>제목</th>
+            <th style="width:50%">제목</th>
+            <th>글쓴이</th>
             <th>작성일시</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="post, loop : ${postList}">
+        <tr class="text-center" th:each="post, loop : ${postList}">
             <td th:text="${loop.count}"></td>
+            <td class="text-start">
+                <a th:href="@{|/post/${id}|}" th:text="${post.subject}"></a>
+            </td>
             <td>
-                <a th:href="@{|/post/${post.id}|}" th:text="${post.subject}"></a>
+                <span th:if="${post.author != null}" th:text="${post.author.username}"></span>
             </td>
             <td th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd HH:mm')}"></td>
         </tr>
